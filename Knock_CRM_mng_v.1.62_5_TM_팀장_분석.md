@@ -1,4 +1,4 @@
-# Knock CRM 팀장(TM) 관리 시스템 분석 보고서
+# Knock CRM TM_팀장 분석 문서
 
 ## 1. 파일 개요
 
@@ -11,7 +11,7 @@
 
 ### 시스템 특징
 - Excel VBA 기반 데이터베이스 관리 시스템
-- ODBC 연결을 통한 SQL Server 데이터베이스 접근
+- ODBC 연결을 통한 Oracle 데이터베이스 접근
 - DentWeb(치과 관리 시스템)과의 양방향 연동
 - 실시간 DB 배포 및 회수 관리
 - 통계 및 성과 분석 기능
@@ -32,24 +32,24 @@
 
 ### 시트별 모듈
 
-| 시트명 | 모듈명 | 주요 기능 |
-|--------|--------|-----------|
-| 조회 | Sheet_조회 | DB 배포/회수 내역, Call Log, 연락처 History 조회 |
-| Config | Sheet_Config | 시스템 설정 및 사용자 정보 초기화 |
-| DentWeb_연동 | Sheet_DentWeb_연동 | DentWeb 예약 데이터 조회 및 업로드 |
-| DB_결산 | Sheet_DB_결산 | DB 결산 데이터 조회 |
-| 예약내원정보 | Sheet_예약내원정보 | 예약 및 내원 여부 관리 |
-| DB_검색 | Sheet_DB_검색 | 구DB 검색 및 참고자료 조회 |
-| DB_배포 | Sheet_DB_배포 | DB 배포 대상 조회 및 배포 실행 |
-| TM_조회_2 | Sheet_TM_조회2 | TM별 과거 콜 기록 조회 |
-| InputDB_입력 | Sheet_InputDB_입력 | INPUT DB 데이터 업로드 |
-| InputDB_작업 | Sheet_InputDB_작업 | INPUT DB 전처리 및 가공 |
-| DB업체_결제 | Sheet_DB업체_결제 | DB 업체 결제 관리 |
-| 통계 | Sheet_통계 | TM별 통계, 내원환자 리스트, Performance |
-| 구DB_작업 | Sheet_구DB_작업 | 구DB 조회 및 배포 시트 이관 |
-| SQL_실행기 | Sheet_SQL_실행기 | SQL 직접 실행 |
-| DashBoard | Sheet_DashBoard | 대시보드 데이터 조회 |
-| Oracle_조회 | Sheet_Oracle_조회 | Oracle DB 조회 (선택적) |
+| 모듈명 | 대응 시트 | 주요 역할 |
+|--------|-----------|-----------|
+| Sheet_조회 | 조회 | DB 배포/회수 내역, Call Log, 연락처 History 조회 |
+| Sheet_Config | Config | 시스템 설정 및 사용자 정보 초기화 |
+| Sheet_DentWeb_연동 | DentWeb_연동 | DentWeb 예약 데이터 조회 및 업로드 |
+| Sheet_DB_결산 | DB_결산 | DB 결산 데이터 조회 |
+| Sheet_예약내원정보 | 예약내원정보 | 예약 및 내원 여부 관리 |
+| Sheet_DB_검색 | DB_검색 | 구DB 검색 및 참고자료 조회 |
+| Sheet_DB_배포 | DB_배포 | DB 배포 대상 조회 및 배포 실행 |
+| Sheet_TM_조회2 | TM_조회_2 | TM별 과거 콜 기록 조회 |
+| Sheet_InputDB_입력 | InputDB_입력 | INPUT DB 데이터 업로드 |
+| Sheet_InputDB_작업 | InputDB_작업 | INPUT DB 전처리 및 가공 |
+| Sheet_DB업체_결제 | DB업체_결제 | DB 업체 결제 관리 |
+| Sheet_통계 | 통계 | TM별 통계, 내원환자 리스트, Performance |
+| Sheet_구DB_작업 | 구DB_작업 | 구DB 조회 및 배포 시트 이관 |
+| Sheet_SQL_실행기 | SQL_실행기 | SQL 직접 실행 |
+| Sheet_DashBoard | DashBoard | 대시보드 데이터 조회 |
+| Sheet_Oracle_조회 | Oracle_조회 | Oracle DB 조회 (선택적) |
 
 ---
 

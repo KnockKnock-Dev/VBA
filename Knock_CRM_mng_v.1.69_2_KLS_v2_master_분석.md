@@ -1,17 +1,20 @@
-# Knock CRM 마스터 관리 시스템 v.1.69_2_KLS_v2 분석 보고서
+# Knock CRM master 분석 문서
 
-## 📋 파일 개요
+## 1. 파일 개요
 
-**파일명**: `Knock_CRM_mng_v.1.69_2_KLS_v2_master.xlsm`
-**버전**: v.1.69_2_KLS_v2_master
-**시스템 유형**: 치과 CRM 마스터 관리 시스템 (Dental Clinic CRM Management System)
-**코드 라인 수**: 11,107 lines
-**데이터베이스**: SQL Server (ADODB 연결)
-**주요 목적**: 치과 고객 DB 입력, 배포, TM 콜 관리, 예약/내원 추적, 통계 분석
+### 기본 정보
+- **파일명**: Knock_CRM_mng_v.1.69_2_KLS_v2_master.xlsm
+- **버전**: v.1.69_2_KLS_v2_master
+- **목적**: 치과 CRM 마스터 관리 시스템 (원장님용)
+- **총 라인 수**: 11,107 lines
+- **대상 사용자**: 원장님
+- **주요 기능**: 치과 고객 DB 입력, 배포, TM 콜 관리, 예약/내원 추적, 통계 분석
 
 ---
 
-## 🏗️ 전체 시스템 아키텍처
+## 2. 전체 구조
+
+### 시스템 아키텍처
 
 ```mermaid
 graph TB
@@ -85,42 +88,40 @@ graph TB
 
 ---
 
-## 📊 전체 구조 (모듈 및 클래스)
+### VBA 모듈 구성
 
-### 🔷 VBA 모듈 구성
+| 모듈명 | 타입 | 주요 역할 |
+|--------|------|-----------|
+| ThisWorkbook | Workbook Class | 워크북 초기화 |
+| Sheet_조회 | Sheet Module | 다목적 조회 기능 |
+| Sheet_Config | Sheet Module | 사용자 및 코드 설정 |
+| Sheet_DentWeb_연동 | Sheet Module | 덴트웹 시스템 연동 |
+| Sheet_DB_결산 | Sheet Module | DB 배포 결산 |
+| Sheet_DB_배포 | Sheet Module | DB 배포 메인 모듈 |
+| Sheet_InputDB_작업 | Sheet Module | 원천 데이터 가공 |
+| Sheet_InputDB_입력 | Sheet Module | 정제된 DB 입력 |
+| Sheet_구DB_작업 | Sheet Module | 과거 DB 재처리 |
+| Sheet_SQL_실행기 | Sheet Module | SQL 직접 실행 |
+| Sheet_DashBoard | Sheet Module | 실시간 대시보드 |
+| Sheet_통계 | Sheet Module | 통계 분석 |
+| Sheet_DB업체_결제 | Sheet Module | DB 업체 결제 조회 |
+| Sheet_예약내원정보 | Sheet Module | 예약/내원 관리 |
+| Sheet_TM_조회2 | Sheet Module | TM 콜 기록 조회 |
+| Sheet_Oracle_조회 | Sheet Module | Oracle 직접 조회 |
+| Sheet_DB_검색 | Sheet Module | DB 검색 |
+| DB_Agent | Class Module | 데이터베이스 연결 클래스 |
+| SQL_Wrapper | Standard Module | SQL 파라미터 처리 |
+| Util | Standard Module | 유틸리티 함수 모음 |
+| Workbook_open | Standard Module | 로그인 및 초기화 |
+| Module3 | Standard Module | 매크로 보조 |
 
-| 모듈 유형 | 모듈명 | 주요 역할 |
-|---------|--------|---------|
-| **Workbook** | ThisWorkbook | 워크북 초기화 |
-| **Sheet Module** | Sheet_조회 | 다목적 조회 기능 |
-| **Sheet Module** | Sheet_Config | 사용자 및 코드 설정 |
-| **Sheet Module** | Sheet_DentWeb_연동 | 덴트웹 시스템 연동 |
-| **Sheet Module** | Sheet_DB_결산 | DB 배포 결산 |
-| **Sheet Module** | Sheet_DB_배포 | DB 배포 메인 모듈 |
-| **Sheet Module** | Sheet_InputDB_작업 | 원천 데이터 가공 |
-| **Sheet Module** | Sheet_InputDB_입력 | 정제된 DB 입력 |
-| **Sheet Module** | Sheet_구DB_작업 | 과거 DB 재처리 |
-| **Sheet Module** | Sheet_SQL_실행기 | SQL 직접 실행 |
-| **Sheet Module** | Sheet_DashBoard | 실시간 대시보드 |
-| **Sheet Module** | Sheet_통계 | 통계 분석 |
-| **Sheet Module** | Sheet_DB업체_결제 | DB 업체 결제 조회 |
-| **Sheet Module** | Sheet_예약내원정보 | 예약/내원 관리 |
-| **Sheet Module** | Sheet_TM_조회2 | TM 콜 기록 조회 |
-| **Sheet Module** | Sheet_Oracle_조회 | Oracle 직접 조회 |
-| **Sheet Module** | Sheet_DB_검색 | DB 검색 |
-| **Class Module** | DB_Agent | 데이터베이스 연결 클래스 |
-| **Standard Module** | SQL_Wrapper | SQL 파라미터 처리 |
-| **Standard Module** | Util | 유틸리티 함수 모음 |
-| **Standard Module** | Workbook_open | 로그인 및 초기화 |
-| **Standard Module** | Module3 | 매크로 보조 |
-
-### 🔸 Empty Sheet Classes (데이터 시트)
+### Empty Sheet Classes (데이터 시트)
 
 - Sheet2, Sheet4, Sheet5, Sheet6, Sheet7, Sheet8, Sheet9, Sheet10, Sheet11, Sheet14, Sheet15, Sheet16, Sheet17, Sheet18
 
 ---
 
-## 🔍 모든 Sub/Function 목록 (85개)
+## 3. Sub/Function 목록 (85개)
 
 | # | 함수/서브루틴명 | 유형 | 소속 모듈 | 주요 기능 |
 |---|--------------|------|---------|---------|
@@ -212,9 +213,9 @@ graph TB
 
 ---
 
-## 🔐 주요 상수 및 전역 변수
+## 4. 주요 상수 및 전역 변수
 
-### 📌 Sheet별 상수
+### 4.1 Sheet별 상수
 
 ```vba
 ' Sheet_조회
@@ -239,7 +240,7 @@ Public Const START_ROW_NUM As Integer = 8
 Const MAX_ROW_NUM As Integer = 10000
 ```
 
-### 🗄️ DB 연결 정보 (DB_Agent 클래스)
+### 4.2 DB 연결 정보 (DB_Agent 클래스)
 
 ```vba
 ' 실제 운영 DB 연결 문자열 (DSN 방식)
@@ -255,11 +256,11 @@ Private connect_str As String = "Provider=SQLOLEDB;" & _
 
 ---
 
-## 🗂️ DB 스키마 정보
+## 5. DB 스키마 정보
 
-### 📊 주요 테이블 구조
+### 5.1 주요 테이블 구조
 
-#### **1. INPUT_DB** (DB 입력 원천 테이블)
+#### 1. INPUT_DB (DB 입력 원천 테이블)
 
 | 컬럼명 | 데이터 타입 | 설명 |
 |-------|-----------|-----|
@@ -289,7 +290,7 @@ Private connect_str As String = "Provider=SQLOLEDB;" & _
 | ALT_DATE | VARCHAR(8) | 작업일자 |
 | ALT_TIME | VARCHAR(8) | 작업시각 |
 
-#### **2. DB_DIST_HIS** (DB 배포 이력 테이블)
+#### 2. DB_DIST_HIS (DB 배포 이력 테이블)
 
 | 컬럼명 | 데이터 타입 | 설명 |
 |-------|-----------|-----|
@@ -321,7 +322,7 @@ Private connect_str As String = "Provider=SQLOLEDB;" & _
 | INPUTDB_REF_SEQ | INTEGER | 원천 INPUT_DB 회차 |
 | INPUTDB_SEQ_NO | INTEGER | 원천 INPUT_DB 순번 |
 
-#### **3. TM_CALL_LOG** (TM 콜 로그 테이블)
+#### 3. TM_CALL_LOG (TM 콜 로그 테이블)
 
 | 컬럼명 | 데이터 타입 | 설명 |
 |-------|-----------|-----|
@@ -344,7 +345,7 @@ Private connect_str As String = "Provider=SQLOLEDB;" & _
 | ALT_DATE | VARCHAR(8) | 작업일자 |
 | ALT_TIME | VARCHAR(8) | 작업시각 |
 
-#### **4. DB_WITHDRAW_HIS** (DB 회수 이력 테이블)
+#### 4. DB_WITHDRAW_HIS (DB 회수 이력 테이블)
 
 | 컬럼명 | 데이터 타입 | 설명 |
 |-------|-----------|-----|
@@ -359,7 +360,7 @@ Private connect_str As String = "Provider=SQLOLEDB;" & _
 | ALT_DATE | VARCHAR(8) | 작업일자 |
 | ALT_TIME | VARCHAR(8) | 작업시각 |
 
-#### **5. MNG_결번_관리** (결번 관리 테이블)
+#### 5. MNG_결번_관리 (결번 관리 테이블)
 
 | 컬럼명 | 데이터 타입 | 설명 |
 |-------|-----------|-----|
@@ -370,7 +371,7 @@ Private connect_str As String = "Provider=SQLOLEDB;" & _
 | ALT_DATE | VARCHAR(8) | 등록일자 |
 | ALT_TIME | VARCHAR(8) | 등록시각 |
 
-#### **6. DentWeb 연동 테이블** (외부 시스템)
+#### 6. DentWeb 연동 테이블 (외부 시스템)
 
 **DentWeb.dbo.T예약정보**
 
@@ -397,9 +398,9 @@ Private connect_str As String = "Provider=SQLOLEDB;" & _
 
 ---
 
-## 🔄 핵심 비즈니스 로직 흐름
+## 6. 핵심 비즈니스 로직 흐름
 
-### 1️⃣ DB 입력 프로세스 (INPUT_DB)
+### 6.1 DB 입력 프로세스 (INPUT_DB)
 
 ```mermaid
 sequenceDiagram
@@ -424,7 +425,7 @@ sequenceDiagram
     DB-->>U: 14. 완료 메시지
 ```
 
-### 2️⃣ DB 배포 프로세스 (DB_DIST_HIS)
+### 6.2 DB 배포 프로세스 (DB_DIST_HIS)
 
 ```mermaid
 flowchart TD
@@ -462,7 +463,7 @@ flowchart TD
     style N fill:#ffcdd2
 ```
 
-### 3️⃣ TM 콜 작업 프로세스 (TM_CALL_LOG)
+### 6.3 TM 콜 작업 프로세스 (TM_CALL_LOG)
 
 ```mermaid
 sequenceDiagram
@@ -493,7 +494,7 @@ sequenceDiagram
     Sheet->>DB2: 12. COMMIT
 ```
 
-### 4️⃣ 예약 및 내원 추적 프로세스
+### 6.4 예약 및 내원 추적 프로세스
 
 ```mermaid
 flowchart LR
@@ -518,7 +519,7 @@ flowchart LR
     style I fill:#b2dfdb
 ```
 
-### 5️⃣ 통계 및 대시보드 집계
+### 6.5 통계 및 대시보드 집계
 
 ```mermaid
 graph TB
@@ -568,7 +569,7 @@ graph TB
 
 ---
 
-## 🔗 DentWeb 연동 프로세스
+## 7. DentWeb 연동 프로세스
 
 ```mermaid
 sequenceDiagram
@@ -615,9 +616,9 @@ sequenceDiagram
 
 ---
 
-## 🆚 다른 파일들과의 차별점
+## 8. 다른 파일들과의 차별점
 
-### 🔵 v.1.69_2_KLS_v2_master vs. 이전 버전
+### 8.1 v.1.69_2_KLS_v2_master vs. 이전 버전
 
 | 구분 | 이전 버전 (v1.6x) | 현재 버전 (v1.69_2_KLS_v2) |
 |------|-----------------|-------------------------|
@@ -631,7 +632,7 @@ sequenceDiagram
 | **Oracle 조회** | 없음 | 직접 테이블 조회 기능 |
 | **보안** | 단순 로그인 | 사용자 인증 + 권한 관리 |
 
-### 🟢 핵심 개선 사항
+### 8.2 핵심 개선 사항
 
 1. **데이터 품질 관리 강화**
    - QUAL_MNG, QUAL_TM 필드 추가
@@ -663,9 +664,9 @@ sequenceDiagram
 
 ---
 
-## 🚀 시스템 주요 특징
+## 9. 시스템 주요 특징
 
-### ✅ 강점
+### 9.1 강점
 
 1. **완전한 워크플로우 관리**
    - DB 입력 → 배포 → 콜 → 예약 → 내원 → 통계까지 전 과정 통합
@@ -689,7 +690,7 @@ sequenceDiagram
    - REF_SEQ 자동 증가
    - 내원 여부 자동 매칭
 
-### ⚠️ 제약 사항
+### 9.2 제약 사항
 
 1. **Excel 기반 시스템**
    - 동시 사용자 제한
@@ -705,7 +706,7 @@ sequenceDiagram
 
 ---
 
-## 📝 결론
+## 10. 결론
 
 **Knock CRM 마스터 관리 시스템 v.1.69_2_KLS_v2**는 치과 CRM을 위한 포괄적인 Excel 기반 관리 시스템으로, DB 입력부터 통계 분석까지 전 과정을 통합 관리합니다.
 

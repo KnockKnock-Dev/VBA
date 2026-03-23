@@ -1,4 +1,4 @@
-# Knock CRM Management v.1.60 - Marketing Analysis VBA 분석 문서
+# Knock CRM Marketing_an 분석 문서
 
 ## 1. 파일 개요
 
@@ -16,19 +16,12 @@
 ## 2. 전체 구조
 
 ### 모듈 구성
-| 모듈/클래스 | 타입 | 설명 | 코드 존재 여부 |
-|------------|------|------|---------------|
-| 현재_통합_문서.cls | Workbook Class | 통합 문서 클래스 | Empty |
-| Sheet1.cls | Worksheet Class | 워크시트 클래스 | Empty |
-| Sheet2.cls | Worksheet Class | 워크시트 클래스 | Empty |
-| Sheet3.cls | Worksheet Class | 워크시트 클래스 | Empty |
-| Sheet4.cls | Worksheet Class | 워크시트 클래스 | Empty |
-| Sheet5.cls | Worksheet Class | 워크시트 클래스 | Empty |
-| Sheet6.cls | Worksheet Class | 워크시트 클래스 | Empty |
-| Sheet7.cls | Worksheet Class | 워크시트 클래스 | Empty |
-| Sheet8.cls | Worksheet Class | 워크시트 클래스 | 코드 존재 (Option Explicit만) |
-| Sheet9.cls | Worksheet Class | 워크시트 클래스 | Empty |
-| **Module1.bas** | Standard Module | **메인 로직 모듈** | **코드 존재** |
+
+| 모듈명 | 타입 | 주요 역할 |
+|--------|------|-----------|
+| 현재_통합_문서.cls | Workbook Class | 통합 문서 초기화 (Empty) |
+| Sheet1~9.cls | Worksheet Class | 워크시트 클래스 (대부분 Empty) |
+| Module1.bas | Standard Module | 메인 로직 모듈 (광고비·매출 입출력) |
 
 ### 아키텍처
 - **데이터베이스**: Oracle (ODBC DSN 연결)
@@ -43,15 +36,15 @@
 
 ## 3. 전체 Sub/Function 목록
 
-| 함수명 | 매개변수 | 주요 역할 | 호출 빈도 |
-|--------|----------|-----------|----------|
-| `AddCostInsert()` | 없음 | 업체별 광고비 데이터를 Excel에서 DB로 일괄 삽입 | Medium |
-| `SalesDataInsert()` | 없음 | 차트번호별 매출 데이터를 Excel에서 DB로 일괄 삽입 | Medium |
-| `RunQueryAndLoadResult()` | 없음 | 광고비 현황 조회 쿼리 실행 및 결과를 Excel에 로드 (파라미터: H2, H3) | High |
-| `RunQuery_Load_Work()` | 없음 | 작업 시트로 데이터 조회 (파라미터: S2, S3, 결과: A~I열) | High |
-| `RunQuery_ChartSalesByChartNo()` | 없음 | 차트번호별 매출현황 조회 (파라미터: T2, T3, 결과: B~K열) | High |
-| `Run_Delete_ChartSalesStatus()` | 없음 | CHART_SALES_STATUS 테이블 전체 데이터 삭제 (초기화) | Low |
-| `Run_Delete_AdCostCompany()` | 없음 | AD_COST_COMPANY 테이블 전체 데이터 삭제 (초기화) | Low |
+| 함수명 | 유형 | 주요 역할 |
+|--------|------|-----------|
+| `AddCostInsert` | Sub | 업체별 광고비 데이터를 Excel에서 DB로 일괄 삽입 |
+| `SalesDataInsert` | Sub | 차트번호별 매출 데이터를 Excel에서 DB로 일괄 삽입 |
+| `RunQueryAndLoadResult` | Sub | 광고비 현황 조회 쿼리 실행 및 결과를 Excel에 로드 (파라미터: H2, H3) |
+| `RunQuery_Load_Work` | Sub | 작업 시트로 데이터 조회 (파라미터: S2, S3, 결과: A~I열) |
+| `RunQuery_ChartSalesByChartNo` | Sub | 차트번호별 매출현황 조회 (파라미터: T2, T3, 결과: B~K열) |
+| `Run_Delete_ChartSalesStatus` | Sub | CHART_SALES_STATUS 테이블 전체 데이터 삭제 (초기화) |
+| `Run_Delete_AdCostCompany` | Sub | AD_COST_COMPANY 테이블 전체 데이터 삭제 (초기화) |
 
 ---
 

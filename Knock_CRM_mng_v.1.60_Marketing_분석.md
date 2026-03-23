@@ -1,12 +1,15 @@
-# Knock CRM Management v.1.60 Marketing.vba 분석 문서
+# Knock CRM Marketing 분석 문서
 
 ## 1. 파일 개요
 
-**파일명**: Knock_CRM_mng_v.1.60_Marketing.xlsm
-**버전**: v.1.60
-**목적**: 치과 CRM 시스템의 마케팅 DB 관리 및 배포를 위한 Excel VBA 매크로 애플리케이션
-**총 라인 수**: 10,717 lines
-**주요 기능**:
+### 기본 정보
+- **파일명**: Knock_CRM_mng_v.1.60_Marketing.xlsm
+- **버전**: v.1.60
+- **목적**: 치과 CRM 시스템의 마케팅 DB 관리 및 배포를 위한 Excel VBA 매크로 애플리케이션
+- **총 라인 수**: 10,717 lines
+- **대상 사용자**: 마케터
+
+### 주요 기능
 - 마케팅 DB 입력, 조회, 배포 관리
 - TM(텔레마케터) 콜 로그 관리
 - DentWeb(치과 예약 시스템) 연동
@@ -17,20 +20,20 @@
 
 ### 2.1 주요 모듈 구성
 
-| 모듈명 | 설명 | 주요 기능 |
+| 모듈명 | 타입 | 주요 역할 |
 |--------|------|-----------|
-| ThisWorkbook.cls | 워크북 초기화 | 사용자 로그인, 초기 설정 |
-| DB_Agent.cls | 데이터베이스 연결 클래스 | ADODB 연결, 트랜잭션 관리 |
-| Sheet_조회.bas | 조회 기능 모듈 | 각종 데이터 조회 기능 |
-| Sheet_DB_배포.bas | DB 배포 관리 | TM에게 DB 배포 및 관리 |
-| Sheet_InputDB_작업.bas | Input DB 전처리 | 다양한 소스의 DB 표준화 |
-| Sheet_InputDB_입력.bas | Input DB 입력 | 표준화된 DB를 시스템에 입력 |
-| Sheet_DentWeb_연동.bas | DentWeb 연동 | 덴트웹 예약 시스템 데이터 동기화 |
-| Sheet_DB_결산.bas | DB 결산 | DB 사용 현황 결산 |
-| Sheet_통계.bas | 통계 분석 | TM별, DB업체별 성과 분석 |
-| Sheet_구DB_작업.bas | 구DB 작업 | 과거 DB 재활용 |
-| Util.bas | 유틸리티 함수 | 날짜 변환, 문자열 처리 등 |
-| SQL_Wrapper.bas | SQL 파라미터 처리 | SQL 파라미터 바인딩 |
+| ThisWorkbook.cls | Workbook Class | 사용자 로그인, 초기 설정 |
+| DB_Agent.cls | Class Module | ADODB 연결, 트랜잭션 관리 |
+| Sheet_조회.bas | Sheet Module | 각종 데이터 조회 기능 |
+| Sheet_DB_배포.bas | Sheet Module | TM에게 DB 배포 및 관리 |
+| Sheet_InputDB_작업.bas | Sheet Module | 다양한 소스의 DB 표준화 |
+| Sheet_InputDB_입력.bas | Sheet Module | 표준화된 DB를 시스템에 입력 |
+| Sheet_DentWeb_연동.bas | Sheet Module | 덴트웹 예약 시스템 데이터 동기화 |
+| Sheet_DB_결산.bas | Sheet Module | DB 사용 현황 결산 |
+| Sheet_통계.bas | Sheet Module | TM별, DB업체별 성과 분석 |
+| Sheet_구DB_작업.bas | Sheet Module | 과거 DB 재활용 |
+| Util.bas | Standard Module | 날짜 변환, 문자열 처리 등 |
+| SQL_Wrapper.bas | Standard Module | SQL 파라미터 바인딩 |
 
 ### 2.2 데이터베이스 연결 정보
 
@@ -51,120 +54,123 @@ pwd=Q3xzJiwpv2zC
 
 ### 3.1 워크북 초기화 및 로그인
 
-| 함수명 | 매개변수 | 주요 역할 | 호출 빈도 |
-|--------|----------|-----------|-----------|
-| Workbook_open | 없음 | 워크북 열릴 때 자동 실행 | High |
-| Workbook_Initialize | 없음 | 사용자 로그인 처리 및 권한 확인 | High |
+| 함수명 | 유형 | 주요 역할 |
+|--------|------|-----------|
+| Workbook_open | Private Sub | 워크북 열릴 때 자동 실행 |
+| Workbook_Initialize | Sub | 사용자 로그인 처리 및 권한 확인 |
 
 ### 3.2 조회 기능 (Sheet_조회.bas)
 
-| 함수명 | 매개변수 | 주요 역할 | 호출 빈도 |
-|--------|----------|-----------|-----------|
-| Sheet_조회_Query | 없음 | 조회 타입별 분기 처리 | High |
-| Sheet_조회_DB_회수_내역_조회 | 없음 | DB 회수 내역 조회 | Medium |
-| Sheet_조회_Call_Log_조회 | 없음 | TM 콜 로그 조회 | High |
-| Sheet_조회_연락처_history_전체_조회 | 없음 | 특정 전화번호의 전체 이력 조회 | Medium |
-| Sheet_조회_DB_배포_내역_조회 | 없음 | DB 배포 내역 조회 | High |
-| Sheet_조회_INPUT_DB_source별_입력시간_조회 | 없음 | 채널별 DB 입력 시간 조회 | Medium |
-| Sheet_조회_INPUT_DB_내역_조회 | 없음 | Input DB 전체 내역 조회 | High |
+| 함수명 | 유형 | 주요 역할 |
+|--------|------|-----------|
+| Sheet_조회_Query | Public Sub | 조회 타입별 분기 처리 |
+| Sheet_조회_DB_회수_내역_조회 | Public Sub | DB 회수 내역 조회 |
+| Sheet_조회_Call_Log_조회 | Public Sub | TM 콜 로그 조회 |
+| Sheet_조회_연락처_history_전체_조회 | Public Sub | 특정 전화번호의 전체 이력 조회 |
+| Sheet_조회_DB_배포_내역_조회 | Public Sub | DB 배포 내역 조회 |
+| Sheet_조회_INPUT_DB_source별_입력시간_조회 | Public Sub | 채널별 DB 입력 시간 조회 |
+| Sheet_조회_INPUT_DB_내역_조회 | Public Sub | Input DB 전체 내역 조회 |
 
 ### 3.3 DB 배포 관리 (Sheet_DB_배포.bas)
 
-| 함수명 | 매개변수 | 주요 역할 | 호출 빈도 |
-|--------|----------|-----------|-----------|
-| Sheet_DB_배포_Clear | 없음 | 배포 화면 데이터 초기화 | Medium |
-| Sheet_DB_배포_Query | 없음 | 신규 배포 대상 DB 조회 | High |
-| Sheet_DB_배포_추가배포_Query | 없음 | 추가 배포 대상 DB 조회 | High |
-| Sheet_DB_배포_DB_Upload | 없음 | TM별 DB 배포 실행 및 회수자 관리 | High |
-| Sheet_DB_배포_회수자_점검 | 없음 | 과거 담당 TM과 현재 배포 TM 비교 | High |
-| Sheet_DB_배포_구DB_참고자료만_조희 | 없음 | 구DB 관련 참고 정보 조회 | Medium |
+| 함수명 | 유형 | 주요 역할 |
+|--------|------|-----------|
+| Sheet_DB_배포_Clear | Public Sub | 배포 화면 데이터 초기화 |
+| Sheet_DB_배포_Query | Public Sub | 신규 배포 대상 DB 조회 |
+| Sheet_DB_배포_추가배포_Query | Public Sub | 추가 배포 대상 DB 조회 |
+| Sheet_DB_배포_DB_Upload | Public Sub | TM별 DB 배포 실행 및 회수자 관리 |
+| Sheet_DB_배포_회수자_점검 | Public Sub | 과거 담당 TM과 현재 배포 TM 비교 |
+| Sheet_DB_배포_구DB_참고자료만_조희 | Public Sub | 구DB 관련 참고 정보 조회 |
 
 ### 3.4 Input DB 처리 (Sheet_InputDB_작업.bas, Sheet_InputDB_입력.bas)
 
-| 함수명 | 매개변수 | 주요 역할 | 호출 빈도 |
-|--------|----------|-----------|-----------|
-| Sheet_InputDB_작업_Clear | 없음 | 작업 시트 초기화 | Medium |
-| Sheet_InputDB_작업_PreProcessing | 없음 | 다양한 소스의 DB를 표준 형식으로 변환 | High |
-| Sheet_InputDB_작업_배포업무_일괄세팅하기 | 없음 | 배포 업무 일괄 설정 | Medium |
-| Sheet_InputDB_입력_Clear | 없음 | 입력 시트 초기화 | Medium |
-| Sheet_InputDB_입력_DB_Upload | 없음 | 표준화된 DB를 시스템에 입력 | High |
+| 함수명 | 유형 | 주요 역할 |
+|--------|------|-----------|
+| Sheet_InputDB_작업_Clear | Public Sub | 작업 시트 초기화 |
+| Sheet_InputDB_작업_PreProcessing | Public Sub | 다양한 소스의 DB를 표준 형식으로 변환 |
+| Sheet_InputDB_작업_배포업무_일괄세팅하기 | Public Sub | 배포 업무 일괄 설정 |
+| Sheet_InputDB_입력_Clear | Public Sub | 입력 시트 초기화 |
+| Sheet_InputDB_입력_DB_Upload | Public Sub | 표준화된 DB를 시스템에 입력 |
 
 **지원 소스**: 애드인, 방송, 홈페이지_1/2, 모두닥(예약/전화/상담), 모두닥할인몰, 타불라, 페이스북, 지오엔, 빅크레프트, 강남언니
 
 ### 3.5 DentWeb 연동 (Sheet_DentWeb_연동.bas)
 
-| 함수명 | 매개변수 | 주요 역할 | 호출 빈도 |
-|--------|----------|-----------|-----------|
-| Sheet_DentWeb_연동_Clear | 없음 | 연동 화면 초기화 | Medium |
-| Sheet_DentWeb_연동_Query | 없음 | DentWeb에서 예약 데이터 조회 (신규/취소/누락 내역) | High |
-| Sheet_DentWeb_연동_DB_Upload | 없음 | 조회한 예약 데이터를 CRM DB에 업로드 | High |
+| 함수명 | 유형 | 주요 역할 |
+|--------|------|-----------|
+| Sheet_DentWeb_연동_Clear | Public Sub | 연동 화면 초기화 |
+| Sheet_DentWeb_연동_Query | Public Sub | DentWeb에서 예약 데이터 조회 (신규/취소/누락 내역) |
+| Sheet_DentWeb_연동_DB_Upload | Public Sub | 조회한 예약 데이터를 CRM DB에 업로드 |
 
 ### 3.6 통계 및 분석 (Sheet_통계.bas, Sheet_DashBoard.bas)
 
-| 함수명 | 매개변수 | 주요 역할 | 호출 빈도 |
-|--------|----------|-----------|-----------|
-| Sheet_통계_조회 | 없음 | 통계 타입별 분기 처리 | High |
-| Sheet_통계_내원환자_리스트_내원일_조회 | 없음 | 내원일 기준 환자 리스트 | Medium |
-| Sheet_통계_내원환자_리스트_배포일_조회 | 없음 | 배포일 기준 환자 리스트 | Medium |
-| Sheet_통계_TM별_일일_통계_조회 | 없음 | TM별 일일 성과 통계 | High |
-| Sheet_통계_TM별_DB업체별_Performance_조회 | 없음 | TM별 DB업체별 성과 분석 | High |
-| Sheet_DashBoard_Query | 없음 | 대시보드 종합 지표 조회 | High |
-| Sheet_DashBoard_Ref_Date_UP/Down | 없음 | 대시보드 날짜 변경 | High |
+| 함수명 | 유형 | 주요 역할 |
+|--------|------|-----------|
+| Sheet_통계_조회 | Public Sub | 통계 타입별 분기 처리 |
+| Sheet_통계_내원환자_리스트_내원일_조회 | Public Sub | 내원일 기준 환자 리스트 |
+| Sheet_통계_내원환자_리스트_배포일_조회 | Public Sub | 배포일 기준 환자 리스트 |
+| Sheet_통계_TM별_일일_통계_조회 | Public Sub | TM별 일일 성과 통계 |
+| Sheet_통계_TM별_DB업체별_Performance_조회 | Public Sub | TM별 DB업체별 성과 분석 |
+| Sheet_DashBoard_Query | Public Sub | 대시보드 종합 지표 조회 |
+| Sheet_DashBoard_Ref_Date_UP | Public Sub | 대시보드 날짜 증가 |
+| Sheet_DashBoard_Ref_Date_Down | Public Sub | 대시보드 날짜 감소 |
 
 ### 3.7 구DB 작업 (Sheet_구DB_작업.bas)
 
-| 함수명 | 매개변수 | 주요 역할 | 호출 빈도 |
-|--------|----------|-----------|-----------|
-| Sheet_구DB_작업_Clear | 없음 | 구DB 작업 화면 초기화 | Medium |
-| Sheet_구DB_작업_Query | 없음 | 과거 DB 중 재활용 가능한 DB 조회 | Medium |
-| Sheet_구DB_작업_DB배포시트_옮기기 | 없음 | 선택한 구DB를 배포 시트로 이동 | Medium |
-| Sheet_구DB_결번정보_DB_Upload | 없음 | 결번(응답없음) 정보 업로드 | Medium |
+| 함수명 | 유형 | 주요 역할 |
+|--------|------|-----------|
+| Sheet_구DB_작업_Clear | Public Sub | 구DB 작업 화면 초기화 |
+| Sheet_구DB_작업_Query | Public Sub | 과거 DB 중 재활용 가능한 DB 조회 |
+| Sheet_구DB_작업_DB배포시트_옮기기 | Public Sub | 선택한 구DB를 배포 시트로 이동 |
+| Sheet_구DB_결번정보_DB_Upload | Public Sub | 결번(응답없음) 정보 업로드 |
 
 ### 3.8 예약 및 내원 관리 (Sheet_예약내원정보.bas)
 
-| 함수명 | 매개변수 | 주요 역할 | 호출 빈도 |
-|--------|----------|-----------|-----------|
-| Sheet_예약내원정보_Clear | 없음 | 예약/내원 화면 초기화 | Medium |
-| Sheet_예약내원정보_Query | 없음 | 예약 및 내원 정보 조회 | High |
-| Sheet_예약내원정보_DB_Update | 없음 | 내원 여부 업데이트 | High |
+| 함수명 | 유형 | 주요 역할 |
+|--------|------|-----------|
+| Sheet_예약내원정보_Clear | Public Sub | 예약/내원 화면 초기화 |
+| Sheet_예약내원정보_Query | Public Sub | 예약 및 내원 정보 조회 |
+| Sheet_예약내원정보_DB_Update | Public Sub | 내원 여부 업데이트 |
 
 ### 3.9 DB Agent 클래스 (DB_Agent.cls)
 
-| 함수명 | 매개변수 | 주요 역할 | 호출 빈도 |
-|--------|----------|-----------|-----------|
-| Connect_DB | 없음 | 데이터베이스 연결 | High |
-| Close_DB | 없음 | 데이터베이스 연결 종료 | High |
-| Select_DB | sql_str (Optional) | SELECT 쿼리 실행 | High |
-| Insert_update_DB | sql_str (Optional) | INSERT/UPDATE/DELETE 쿼리 실행 | High |
-| Begin_Trans | 없음 | 트랜잭션 시작 | Medium |
-| Commit_Trans | 없음 | 트랜잭션 커밋 | Medium |
-| Rollback_Trans | 없음 | 트랜잭션 롤백 | Low |
+| 함수명 | 유형 | 주요 역할 |
+|--------|------|-----------|
+| Connect_DB | Public Function | 데이터베이스 연결 |
+| Close_DB | Private Function | 데이터베이스 연결 종료 |
+| Select_DB | Function | SELECT 쿼리 실행 |
+| Insert_update_DB | Function | INSERT/UPDATE/DELETE 쿼리 실행 |
+| Begin_Trans | Public Function | 트랜잭션 시작 |
+| Commit_Trans | Public Function | 트랜잭션 커밋 |
+| Rollback_Trans | Public Function | 트랜잭션 롤백 |
 
 ### 3.10 유틸리티 함수 (Util.bas)
 
-| 함수명 | 매개변수 | 주요 역할 | 호출 빈도 |
-|--------|----------|-----------|-----------|
-| make_SQL | sql_str, ParamArray arglist() | SQL 파라미터 바인딩 (:param01, :param02 등) | High |
-| Cnvt_to_Date | p_date As String | yyyyMMdd → yyyy-MM-dd 변환 | High |
-| ADD_Date | p_ref_date, p_add_num, p_add_unit, p_holydays | 영업일 기준 날짜 계산 | Medium |
-| File_Exists | sPathName, Optional Directory | 파일/디렉토리 존재 확인 | Low |
-| Get_Row_by_Find | p_sheet_name, p_col_idx, p_name_to_find | 시트에서 특정 값 찾기 | Medium |
-| Get_Row_num | p_sheet_name, p_row_idx, p_col_idx | 데이터 행 개수 세기 | Medium |
+| 함수명 | 유형 | 주요 역할 |
+|--------|------|-----------|
+| make_SQL | Function | SQL 파라미터 바인딩 (:param01, :param02 등) |
+| Cnvt_to_Date | Public Function | yyyyMMdd → yyyy-MM-dd 변환 |
+| ADD_Date | Public Function | 영업일 기준 날짜 계산 |
+| File_Exists | Public Function | 파일/디렉토리 존재 확인 |
+| Get_Row_by_Find | Public Function | 시트에서 특정 값 찾기 |
+| Get_Row_num | Public Function | 데이터 행 개수 세기 |
 
 ### 3.11 DB 업체 결제 관리 (Sheet_DB업체_결제.bas)
 
-| 함수명 | 매개변수 | 주요 역할 | 호출 빈도 |
-|--------|----------|-----------|-----------|
-| Sheet_DB업체_결제_Clear | 없음 | 결제 화면 초기화 | Low |
-| Sheet_DB업체_결제_Query | 없음 | DB 업체별 결제 정보 조회 | Medium |
-| Run_SQL_C77_동적IN_출력 | 없음 | 동적 IN 절을 사용한 SQL 실행 | Medium |
+| 함수명 | 유형 | 주요 역할 |
+|--------|------|-----------|
+| Sheet_DB업체_결제_Clear | Public Sub | 결제 화면 초기화 |
+| Sheet_DB업체_결제_Query | Public Sub | DB 업체별 결제 정보 조회 |
+| Run_SQL_C77_동적IN_출력 | Public Sub | 동적 IN 절을 사용한 SQL 실행 |
 
 ### 3.12 SQL 실행기 (Sheet_SQL_실행기.bas)
 
-| 함수명 | 매개변수 | 주요 역할 | 호출 빈도 |
-|--------|----------|-----------|-----------|
-| Sheet_SQL_실행기_Clear | 없음 | SQL 실행 화면 초기화 | Low |
-| Sheet_SQL_실행기_Query | 없음 | 사용자 정의 SQL 실행 | Medium |
+| 함수명 | 유형 | 주요 역할 |
+|--------|------|-----------|
+| Sheet_SQL_실행기_Clear | Public Sub | SQL 실행 화면 초기화 |
+| Sheet_SQL_실행기_Query | Public Sub | 사용자 정의 SQL 실행 |
+
+---
 
 ## 4. 주요 상수 및 전역 변수
 
@@ -193,6 +199,8 @@ pwd=Q3xzJiwpv2zC
 | connect_str | String | 연결 문자열 |
 | sql_str | String | SQL 쿼리 문자열 |
 | result_recordset | ADODB.Recordset | 쿼리 결과 레코드셋 |
+
+---
 
 ## 5. DB 스키마 정보
 
@@ -336,6 +344,8 @@ USER_NAME          - 사용자 이름
 USER_PASS          - 비밀번호
 ```
 
+---
+
 ### 5.2 주요 SQL 쿼리 패턴
 
 **파라미터 바인딩 패턴**:
@@ -346,6 +356,8 @@ USER_PASS          - 비밀번호
 **날짜 포맷**:
 - 저장: `yyyyMMdd` (예: 20250817)
 - 표시: `yyyy-MM-dd` (예: 2025-08-17)
+
+---
 
 ## 6. 핵심 비즈니스 로직
 
@@ -431,6 +443,8 @@ USER_PASS          - 비밀번호
    └─ 재배포 여부 판단
    └─ 선택한 DB를 배포 시트로 이동
 ```
+
+---
 
 ## 7. 다른 파일과의 차별점 (Marketing vs Marketing_an)
 
@@ -584,6 +598,8 @@ Connection.Close
 3. Excel VBA 기반
 4. 파라미터 바인딩 방식 사용 (:param01, :param02)
 
+---
+
 ## 8. 보안 주의사항
 
 **경고**: 이 파일에는 하드코딩된 데이터베이스 자격 증명이 포함되어 있습니다:
@@ -601,6 +617,8 @@ DSN=dentweb;uid=sa;pwd=Q3xzJiwpv2zC
 2. 최소 권한 원칙 적용
 3. 정기적인 비밀번호 변경
 4. 접근 로그 모니터링
+
+---
 
 ## 9. 결론
 
