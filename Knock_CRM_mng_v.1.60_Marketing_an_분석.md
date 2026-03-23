@@ -17,11 +17,11 @@
 
 ### 모듈 구성
 
-| 모듈명 | 타입 | 주요 역할 |
-|--------|------|-----------|
-| 현재_통합_문서.cls | Workbook Class | 통합 문서 초기화 (Empty) |
-| Sheet1~9.cls | Worksheet Class | 워크시트 클래스 (대부분 Empty) |
-| Module1.bas | Standard Module | 메인 로직 모듈 (광고비·매출 입출력) |
+| 모듈명             | 타입            | 주요 역할                           |
+| ------------------ | --------------- | ----------------------------------- |
+| 현재_통합_문서.cls | Workbook Class  | 통합 문서 초기화 (Empty)            |
+| Sheet1~9.cls       | Worksheet Class | 워크시트 클래스 (대부분 Empty)      |
+| Module1.bas        | Standard Module | 메인 로직 모듈 (광고비·매출 입출력) |
 
 ### 아키텍처
 - **데이터베이스**: Oracle (ODBC DSN 연결)
@@ -36,15 +36,15 @@
 
 ## 3. 전체 Sub/Function 목록
 
-| 함수명 | 유형 | 주요 역할 |
-|--------|------|-----------|
-| `AddCostInsert` | Sub | 업체별 광고비 데이터를 Excel에서 DB로 일괄 삽입 |
-| `SalesDataInsert` | Sub | 차트번호별 매출 데이터를 Excel에서 DB로 일괄 삽입 |
-| `RunQueryAndLoadResult` | Sub | 광고비 현황 조회 쿼리 실행 및 결과를 Excel에 로드 (파라미터: H2, H3) |
-| `RunQuery_Load_Work` | Sub | 작업 시트로 데이터 조회 (파라미터: S2, S3, 결과: A~I열) |
-| `RunQuery_ChartSalesByChartNo` | Sub | 차트번호별 매출현황 조회 (파라미터: T2, T3, 결과: B~K열) |
-| `Run_Delete_ChartSalesStatus` | Sub | CHART_SALES_STATUS 테이블 전체 데이터 삭제 (초기화) |
-| `Run_Delete_AdCostCompany` | Sub | AD_COST_COMPANY 테이블 전체 데이터 삭제 (초기화) |
+| 함수명                         | 유형 | 주요 역할                                                            |
+| ------------------------------ | ---- | -------------------------------------------------------------------- |
+| `AddCostInsert`                | Sub  | 업체별 광고비 데이터를 Excel에서 DB로 일괄 삽입                      |
+| `SalesDataInsert`              | Sub  | 차트번호별 매출 데이터를 Excel에서 DB로 일괄 삽입                    |
+| `RunQueryAndLoadResult`        | Sub  | 광고비 현황 조회 쿼리 실행 및 결과를 Excel에 로드 (파라미터: H2, H3) |
+| `RunQuery_Load_Work`           | Sub  | 작업 시트로 데이터 조회 (파라미터: S2, S3, 결과: A~I열)              |
+| `RunQuery_ChartSalesByChartNo` | Sub  | 차트번호별 매출현황 조회 (파라미터: T2, T3, 결과: B~K열)             |
+| `Run_Delete_ChartSalesStatus`  | Sub  | CHART_SALES_STATUS 테이블 전체 데이터 삭제 (초기화)                  |
+| `Run_Delete_AdCostCompany`     | Sub  | AD_COST_COMPANY 테이블 전체 데이터 삭제 (초기화)                     |
 
 ---
 
@@ -58,10 +58,10 @@ PWD: kkptcmr!@34
 ```
 
 ### 타임아웃 설정
-| 항목 | 값 | 설명 |
-|------|-----|------|
-| ConnectionTimeout | 300초 (5분) | DB 연결 타임아웃 |
-| CommandTimeout | 300초 (5분) | SQL 명령 실행 타임아웃 |
+| 항목              | 값          | 설명                   |
+| ----------------- | ----------- | ---------------------- |
+| ConnectionTimeout | 300초 (5분) | DB 연결 타임아웃       |
+| CommandTimeout    | 300초 (5분) | SQL 명령 실행 타임아웃 |
 
 ### 전역 변수
 이 파일에는 전역 변수가 선언되어 있지 않습니다. 모든 변수는 프로시저 내에서 로컬로 선언됩니다.
@@ -76,13 +76,13 @@ PWD: kkptcmr!@34
 ## 5. DB 스키마 정보
 
 ### 5.1. AD_COST_COMPANY 테이블 (광고비 업체별 현황)
-| 컬럼명 | 타입 | 설명 | 소스 |
-|--------|------|------|------|
-| DB_INPUT_DATE | DATE/VARCHAR | DB 입력일자 | Cells(i, 1) |
-| DB_SRC_1 | VARCHAR | DB 소스 1 (광고 채널 등) | Cells(i, 2) |
-| DB_SRC_2 | VARCHAR | DB 소스 2 (세부 채널) | Cells(i, 3) |
-| EVENT | VARCHAR | 이벤트 구분 | Cells(i, 4) |
-| AD_COST | NUMBER | 광고비 금액 | Cells(i, 5) |
+| 컬럼명        | 타입         | 설명                     | 소스        |
+| ------------- | ------------ | ------------------------ | ----------- |
+| DB_INPUT_DATE | DATE/VARCHAR | DB 입력일자              | Cells(i, 1) |
+| DB_SRC_1      | VARCHAR      | DB 소스 1 (광고 채널 등) | Cells(i, 2) |
+| DB_SRC_2      | VARCHAR      | DB 소스 2 (세부 채널)    | Cells(i, 3) |
+| EVENT         | VARCHAR      | 이벤트 구분              | Cells(i, 4) |
+| AD_COST       | NUMBER       | 광고비 금액              | Cells(i, 5) |
 
 **관련 프로시저**:
 - `AddCostInsert()`: INSERT 작업
@@ -90,20 +90,20 @@ PWD: kkptcmr!@34
 - `Run_Delete_AdCostCompany()`: DELETE 작업 (SQL!C5)
 
 ### 5.2. CHART_SALES_STATUS 테이블 (차트번호별 매출현황)
-| 컬럼명 | 타입 | 설명 | 소스 |
-|--------|------|------|------|
-| INPUT_DATE | VARCHAR(8) | 입력일자 (YYYYMMDD) | Cells(i, 1) - Format으로 변환 |
-| RESERV_DATE | VARCHAR | 예약일자 | Cells(i, 2) |
-| RESERV_TIME | VARCHAR | 예약시간 | Cells(i, 3) |
-| CHART_NO | VARCHAR | 차트번호 (고유 식별자) | Cells(i, 4) |
-| CLIENT_NAME | VARCHAR | 고객명 | Cells(i, 5) |
-| PHONE_NO | VARCHAR | 전화번호 | Cells(i, 6) |
-| EVENT_TYPE | VARCHAR | 이벤트 유형 | Cells(i, 7) |
-| DB_SRC_2 | VARCHAR | DB 소스2 | Cells(i, 8) |
-| REF_DATE | VARCHAR | 참조일자 | Cells(i, 9) |
-| DB_INPUT_DATE | VARCHAR | DB 입력일자 | Cells(i, 10) |
-| TM_NAME | VARCHAR | TM 이름 (텔레마케터) | Cells(i, 11) |
-| CONSENT_SALES | NUMBER | 동의 매출액 | Cells(i, 17) |
+| 컬럼명        | 타입       | 설명                   | 소스                          |
+| ------------- | ---------- | ---------------------- | ----------------------------- |
+| INPUT_DATE    | VARCHAR(8) | 입력일자 (YYYYMMDD)    | Cells(i, 1) - Format으로 변환 |
+| RESERV_DATE   | VARCHAR    | 예약일자               | Cells(i, 2)                   |
+| RESERV_TIME   | VARCHAR    | 예약시간               | Cells(i, 3)                   |
+| CHART_NO      | VARCHAR    | 차트번호 (고유 식별자) | Cells(i, 4)                   |
+| CLIENT_NAME   | VARCHAR    | 고객명                 | Cells(i, 5)                   |
+| PHONE_NO      | VARCHAR    | 전화번호               | Cells(i, 6)                   |
+| EVENT_TYPE    | VARCHAR    | 이벤트 유형            | Cells(i, 7)                   |
+| DB_SRC_2      | VARCHAR    | DB 소스2               | Cells(i, 8)                   |
+| REF_DATE      | VARCHAR    | 참조일자               | Cells(i, 9)                   |
+| DB_INPUT_DATE | VARCHAR    | DB 입력일자            | Cells(i, 10)                  |
+| TM_NAME       | VARCHAR    | TM 이름 (텔레마케터)   | Cells(i, 11)                  |
+| CONSENT_SALES | NUMBER     | 동의 매출액            | Cells(i, 17)                  |
 
 **관련 프로시저**:
 - `SalesDataInsert()`: INSERT 작업
@@ -111,13 +111,13 @@ PWD: kkptcmr!@34
 - `Run_Delete_ChartSalesStatus()`: DELETE 작업 (SQL!C6)
 
 ### 5.3. SQL 쿼리 저장 위치 (SQL 시트)
-| 셀 위치 | 쿼리 용도 | 사용 프로시저 |
-|---------|----------|--------------|
-| C2 | 광고비 현황 조회 (파라미터: :param01, :param02) | RunQueryAndLoadResult() |
-| C3 | 작업 시트 데이터 조회 (파라미터: :param01, :param02) | RunQuery_Load_Work() |
-| C4 | 차트번호별 매출현황 조회 (파라미터: :param01, :param02) | RunQuery_ChartSalesByChartNo() |
-| C5 | AD_COST_COMPANY 삭제 쿼리 | Run_Delete_AdCostCompany() |
-| C6 | CHART_SALES_STATUS 삭제 쿼리 | Run_Delete_ChartSalesStatus() |
+| 셀 위치 | 쿼리 용도                                               | 사용 프로시저                  |
+| ------- | ------------------------------------------------------- | ------------------------------ |
+| C2      | 광고비 현황 조회 (파라미터: :param01, :param02)         | RunQueryAndLoadResult()        |
+| C3      | 작업 시트 데이터 조회 (파라미터: :param01, :param02)    | RunQuery_Load_Work()           |
+| C4      | 차트번호별 매출현황 조회 (파라미터: :param01, :param02) | RunQuery_ChartSalesByChartNo() |
+| C5      | AD_COST_COMPANY 삭제 쿼리                               | Run_Delete_AdCostCompany()     |
+| C6      | CHART_SALES_STATUS 삭제 쿼리                            | Run_Delete_ChartSalesStatus()  |
 
 ---
 
@@ -144,6 +144,11 @@ PWD: kkptcmr!@34
 - 날짜 포맷 변환 없이 직접 삽입
 - 에러 핸들링 없음 (실패 시 중단)
 
+**관련 함수 (Marketing_an.vba)**
+| 함수            | 링크                                                                                                             | 설명                          |
+| --------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `AddCostInsert` | [`L34`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.60_Marketing_an.vba#L34) | AD_COST_COMPANY 광고비 INSERT |
+
 #### SalesDataInsert() - 매출 데이터 일괄 등록
 ```
 [프로세스 흐름]
@@ -160,6 +165,11 @@ PWD: kkptcmr!@34
 **특징**:
 - `Format(Cells(i, 1).Value, "yyyymmdd")` 날짜 변환 적용
 - 컬럼 건너뛰기 있음 (12~16열 제외, 17열 사용)
+
+**관련 함수 (Marketing_an.vba)**
+| 함수              | 링크                                                                                                             | 설명                                  |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| `SalesDataInsert` | [`L76`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.60_Marketing_an.vba#L76) | CHART_SALES_STATUS 매출 데이터 INSERT |
 
 ### 6.2. 쿼리 조회 및 결과 로드 프로세스
 
@@ -194,6 +204,13 @@ PWD: kkptcmr!@34
 - **결과 출력**: B1:K열 (B열부터 시작, 10개 컬럼)
 - **특징**: A열은 사용하지 않음 (다른 용도로 예약된 듯)
 
+**관련 함수 (Marketing_an.vba)**
+| 함수                           | 링크                                                                                                               | 설명                          |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ----------------------------- |
+| `RunQueryAndLoadResult`        | [`L129`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.60_Marketing_an.vba#L129) | 광고비 현황 조회 및 시트 출력 |
+| `RunQuery_Load_Work`           | [`L195`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.60_Marketing_an.vba#L195) | 작업 데이터 조회              |
+| `RunQuery_ChartSalesByChartNo` | [`L274`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.60_Marketing_an.vba#L274) | 차트 번호별 매출 조회         |
+
 ### 6.3. 데이터 삭제 프로세스
 
 #### 공통 안전장치
@@ -212,6 +229,12 @@ If userResponse = vbNo Then Exit Sub
 - SQL!C5 셀에서 DELETE 쿼리 읽기
 - 동일한 확인 프로세스
 
+**관련 함수 (Marketing_an.vba)**
+| 함수                          | 링크                                                                                                               | 설명                             |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
+| `Run_Delete_ChartSalesStatus` | [`L353`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.60_Marketing_an.vba#L353) | CHART_SALES_STATUS 테이블 DELETE |
+| `Run_Delete_AdCostCompany`    | [`L396`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.60_Marketing_an.vba#L396) | AD_COST_COMPANY 테이블 DELETE    |
+
 ---
 
 ## 7. 다른 파일과의 차별점
@@ -223,11 +246,11 @@ If userResponse = vbNo Then Exit Sub
 - 광고 투자 대비 성과 분석을 위한 데이터 수집
 
 ### 7.2. 예상되는 Knock CRM 시스템의 다른 파일들
-| 예상 파일 | 차별점 |
-|-----------|--------|
-| **Knock_CRM_mng_v.1.60_Sales.vba** | 영업 관리 중심 (계약, 고객 관리) |
-| **Knock_CRM_mng_v.1.60_TM.vba** | 텔레마케팅 관리 (콜 로그, 상담 내역) |
-| **Knock_CRM_mng_v.1.60_Admin.vba** | 관리자 기능 (권한, 시스템 설정) |
+| 예상 파일                          | 차별점                               |
+| ---------------------------------- | ------------------------------------ |
+| **Knock_CRM_mng_v.1.60_Sales.vba** | 영업 관리 중심 (계약, 고객 관리)     |
+| **Knock_CRM_mng_v.1.60_TM.vba**    | 텔레마케팅 관리 (콜 로그, 상담 내역) |
+| **Knock_CRM_mng_v.1.60_Admin.vba** | 관리자 기능 (권한, 시스템 설정)      |
 
 ### 7.3. 이 파일의 고유 특징
 
@@ -243,11 +266,11 @@ sqlText = Replace(sqlText, ":param02", "'" & param02 & "'")
 ```
 
 #### 3. 시트별 특화된 출력 범위
-| 시트 | 컬럼 범위 | 시작 행 | 용도 |
-|------|----------|---------|------|
-| 업체별 광고비 현황 | A~E | 1행 | 광고비 집계 |
-| 작업 | A~I | 2행 | 임시 분석 작업 |
-| 차트번호별 매출현황 | B~K | 1행 | 매출 상세 (A열 제외) |
+| 시트                | 컬럼 범위 | 시작 행 | 용도                 |
+| ------------------- | --------- | ------- | -------------------- |
+| 업체별 광고비 현황  | A~E       | 1행     | 광고비 집계          |
+| 작업                | A~I       | 2행     | 임시 분석 작업       |
+| 차트번호별 매출현황 | B~K       | 1행     | 매출 상세 (A열 제외) |
 
 #### 4. 데이터 무결성 관리
 - 삭제 작업 시 사용자 확인 메시지 (2단계 확인)
