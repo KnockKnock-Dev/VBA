@@ -241,6 +241,15 @@ sequenceDiagram
     Target->>User: 완료 메시지
 ```
 
+**관련 함수**
+| 함수                               | 파일   | 링크                                                                                                                  |
+| ---------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------- |
+| `Sheet_InputDB_작업_PreProcessing` | master | [L4780](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L4780) |
+| `Sheet_InputDB_입력_DB_Upload`     | master | [L4491](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L4491) |
+| `Begin_Trans`                      | master | [L1631](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1631) |
+| `Commit_Trans`                     | master | [L1635](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1635) |
+| `Insert_update_DB`                 | master | [L1575](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1575) |
+
 ### 2. DB 배포 프로세스 함수 체인
 
 ```mermaid
@@ -299,6 +308,14 @@ sequenceDiagram
     Upload->>User: 배포 완료
 ```
 
+**관련 함수**
+| 함수                           | 파일   | 링크                                                                                                                                                                                                                                          |
+| ------------------------------ | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Sheet_DB_배포_Query`          | master | [L3002](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L3002)                                                                                                                         |
+| `Sheet_DB_배포_회수자_점검`    | master | [L3984](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L3984)                                                                                                                         |
+| `Sheet_DB_배포_DB_Upload`      | master | [L3413](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L3413)                                                                                                                         |
+| `Begin_Trans` / `Commit_Trans` | master | [L1631](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1631) / [L1635](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1635) |
+
 ### 3. TM 콜 수행 프로세스 함수 체인
 
 ```mermaid
@@ -348,6 +365,14 @@ sequenceDiagram
     CRM입력->>DB: Commit_Trans()
     CRM입력->>TM: 업로드 완료
 ```
+
+**관련 함수**
+| 함수                           | 파일    | 링크                                                                                                                                                                                                                                                    |
+| ------------------------------ | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Sheet_당일배포_Query`         | TM_일반 | [L2156](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2156)                                                                                                                              |
+| `Sheet_당일배포_CRM입력_복사`  | TM_일반 | [L2320](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2320)                                                                                                                              |
+| `Sheet_CRM_입력_CRM_Upload`    | TM_일반 | [L420](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L420)                                                                                                                                |
+| `Begin_Trans` / `Commit_Trans` | TM_일반 | [L1415](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1415) / [L1419](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1419) |
 
 ### 4. DentWeb 연동 프로세스 함수 체인
 
@@ -406,6 +431,14 @@ sequenceDiagram
     Sheet->>Admin: 동기화 완료
 ```
 
+**관련 함수**
+| 함수                           | 파일   | 링크                                                                                                                                                                                                                                          |
+| ------------------------------ | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Sheet_DentWeb_연동_Query`     | master | [L888](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L888)                                                                                                                           |
+| `Sheet_DentWeb_연동_DB_Upload` | master | [L1036](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1036)                                                                                                                         |
+| `Connect_DB`                   | master | [L1515](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1515)                                                                                                                         |
+| `Begin_Trans` / `Commit_Trans` | master | [L1631](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1631) / [L1635](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1635) |
+
 ### 5. 통계 및 분석 프로세스 함수 체인
 
 ```mermaid
@@ -447,6 +480,15 @@ sequenceDiagram
     Query->>통계: 서식 적용
     Query->>User: 조회 완료
 ```
+
+**관련 함수**
+| 함수                                        | 파일   | 링크                                                                                                                  |
+| ------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------- |
+| `Sheet_통계_조회`                           | master | [L8617](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L8617) |
+| `Sheet_통계_내원환자_리스트_내원일_조회`    | master | [L8699](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L8699) |
+| `Sheet_통계_TM별_일일_통계_조회`            | master | [L9039](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L9039) |
+| `Sheet_통계_TM별_DB업체별_Performance_조회` | master | [L9216](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L9216) |
+| `Select_DB`                                 | master | [L1544](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1544) |
 
 ---
 
@@ -751,6 +793,31 @@ graph TB
     style F15 fill:#fce4ec
 ```
 
+**관련 함수 (master.vba) — permalink**
+| 함수                                        | 링크                                                                                                                    |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `Sheet_InputDB_작업_PreProcessing`          | [L4780](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L4780)   |
+| `Sheet_InputDB_입력_DB_Upload`              | [L4491](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L4491)   |
+| `Sheet_DB_배포_Query`                       | [L3002](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L3002)   |
+| `Sheet_DB_배포_추가배포_Query`              | [L2551](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L2551)   |
+| `Sheet_DB_배포_회수자_점검`                 | [L3984](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L3984)   |
+| `Sheet_DB_배포_DB_Upload`                   | [L3413](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L3413)   |
+| `Sheet_DentWeb_연동_Query`                  | [L888](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L888)     |
+| `Sheet_DentWeb_연동_DB_Upload`              | [L1036](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1036)   |
+| `Sheet_예약내원정보_Query`                  | [L10055](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L10055) |
+| `Sheet_예약내원정보_DB_Update`              | [L10137](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L10137) |
+| `Sheet_구DB_작업_Query`                     | [L10293](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L10293) |
+| `Sheet_통계_TM별_일일_통계_조회`            | [L9039](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L9039)   |
+| `Sheet_통계_TM별_DB업체별_Performance_조회` | [L9216](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L9216)   |
+| `Sheet_DashBoard_Query`                     | [L7951](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L7951)   |
+| `Sheet_DB업체_결제_Query`                   | [L9816](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L9816)   |
+| `Connect_DB`                                | [L1515](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1515)   |
+| `Select_DB`                                 | [L1544](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1544)   |
+| `Insert_update_DB`                          | [L1575](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1575)   |
+| `Begin_Trans`                               | [L1631](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1631)   |
+| `Commit_Trans`                              | [L1635](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1635)   |
+| `make_SQL`                                  | [L1650](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1650)   |
+
 ### TM 일반 시스템 핵심 함수 맵
 
 ```mermaid
@@ -810,6 +877,24 @@ graph TB
     style T8 fill:#fff9c4
     style T10 fill:#f8bbd0
 ```
+
+**관련 함수 (TM_일반.vba) — permalink**
+| 함수                              | 링크                                                                                                                       |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `Sheet_당일배포_Query`            | [L2156](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2156) |
+| `Sheet_당일배포_추가배포_조회`    | [L1968](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1968) |
+| `Sheet_조회_1_Query`              | [L846](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L846)   |
+| `Sheet_조회_1_행추가`             | [L986](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L986)   |
+| `Sheet_당일배포_CRM입력_복사`     | [L2320](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2320) |
+| `Sheet_조회_1_CRM_입력_복사_개별` | [L1038](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1038) |
+| `Sheet_CRM_입력_CRM_Upload`       | [L420](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L420)   |
+| `Sheet_조회_1_내원여부_저장`      | [L1167](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1167) |
+| `Sheet_통계_TM별_일일_통계_조회`  | [L2524](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2524) |
+| `Sheet_통계_내원환자_리스트_조회` | [L2692](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2692) |
+| `Connect_DB`                      | [L1299](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1299) |
+| `Select_DB`                       | [L1328](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1328) |
+| `Insert_update_DB`                | [L1359](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1359) |
+| `make_SQL`                        | [L1434](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1434) |
 
 ---
 
@@ -876,6 +961,19 @@ sequenceDiagram
     DB-->>관리자: 34. 결제 금액 산출
 ```
 
+**관련 함수**
+| 단계               | 함수                                                                                                                                                                                                                                                                                       | 파일    | 링크        |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- | ----------- |
+| 3~4 InputDB 입력   | [`Sheet_InputDB_작업_PreProcessing`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L4780)                                                                                                                                         | master  | L4780       |
+| 4 DB 저장          | [`Sheet_InputDB_입력_DB_Upload`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L4491)                                                                                                                                             | master  | L4491       |
+| 5~8 DB 배포        | [`Sheet_DB_배포_Query`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L3002) / [`Sheet_DB_배포_DB_Upload`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L3413)          | master  | L3002/L3413 |
+| 9~11 당일배포 조회 | [`Sheet_당일배포_Query`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2156)                                                                                                                                                | TM_일반 | L2156       |
+| 18~19 CRM 업로드   | [`Sheet_CRM_입력_CRM_Upload`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L420)                                                                                                                                            | TM_일반 | L420        |
+| 20~23 DentWeb 연동 | [`Sheet_DentWeb_연동_Query`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L888) / [`Sheet_DentWeb_연동_DB_Upload`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L1036) | master  | L888/L1036  |
+| 26~28 내원 저장    | [`Sheet_조회_1_내원여부_저장`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1167)                                                                                                                                          | TM_일반 | L1167       |
+| 29~31 통계 조회    | [`Sheet_통계_조회`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L8617)                                                                                                                                                          | master  | L8617       |
+| 32~34 결제 조회    | [`Sheet_DB업체_결제_Query`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L9816)                                                                                                                                                  | master  | L9816       |
+
 ### 시나리오 2: 마케팅 ROI 분석 전체 흐름
 
 ```mermaid
@@ -913,6 +1011,15 @@ sequenceDiagram
     분석가->>마케팅: 16. 채널별 성과 리포트
     마케팅->>마케팅: 17. 다음 달 광고 전략 수립
 ```
+
+**관련 함수**
+| 단계            | 함수                                                                                                                                                        | 파일         | 링크  |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ----- |
+| 9 광고비 INSERT | [`AddCostInsert`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.60_Marketing_an.vba#L34)                                  | Marketing_an | L34   |
+| 12 매출 INSERT  | [`SalesDataInsert`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.60_Marketing_an.vba#L76)                                | Marketing_an | L76   |
+| 13 광고비 조회  | [`RunQueryAndLoadResult`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.60_Marketing_an.vba#L129)                         | Marketing_an | L129  |
+| 14 매출 조회    | [`RunQuery_ChartSalesByChartNo`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.60_Marketing_an.vba#L274)                  | Marketing_an | L274  |
+| 6 통계 집계     | [`Sheet_통계_TM별_DB업체별_Performance_조회`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_mng_v.1.69_2_KLS_v2_master.vba#L9216) | master       | L9216 |
 
 ---
 

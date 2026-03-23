@@ -85,22 +85,31 @@ graph TB
     DB --> DB4
 ```
 
+**관련 함수 (TM_일반.vba)**
+| 모듈          | 함수                                                                                                                                       | 설명                     |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
+| Workbook_open | [`Workbook_Initialize`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1593) | 워크북 열기 시 인증 처리 |
+| DB_Agent      | [`Connect_DB`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1299)          | ODBC DB 연결             |
+| DB_Agent      | [`Select_DB`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1328)           | SELECT 쿼리 실행         |
+| DB_Agent      | [`Insert_update_DB`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1359)    | INSERT/UPDATE 실행       |
+| SQL_Wrapper   | [`make_SQL`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1434)            | SQL 파라미터 바인딩      |
+
 ### 2.2 모듈 구성
 
-| 모듈명 | 타입 | 주요 역할 |
-|--------|------|-----------|
-| ThisWorkbook.cls | Workbook Class | 워크북 초기화 이벤트 |
-| Sheet_당일배포.bas | Sheet Module | 당일 배포 DB 조회/관리 |
-| Sheet_조회_1.bas | Sheet Module | 과거 콜 로그 조회 (메인) |
-| Sheet_조회_2.bas | Sheet Module | 과거 콜 로그 조회 (서브) |
-| Sheet_CRM_입력.bas | Sheet Module | CRM 업로드 처리 |
-| Sheet_예약조회.bas | Sheet Module | 예약 조회 및 관리 |
-| Sheet_통계.bas | Sheet Module | 통계 데이터 조회 |
-| DB_Agent.cls | Class Module | DB 연결/트랜잭션 관리 |
-| SQL_Wrapper.bas | Standard Module | SQL 파라미터 바인딩 |
-| Util.bas | Standard Module | 범용 헬퍼 함수 |
-| Workbook_open.bas | Standard Module | 로그인 및 초기화 |
-| Module1.bas | Standard Module | 녹화된 매크로 (미사용) |
+| 모듈명             | 타입            | 주요 역할                |
+| ------------------ | --------------- | ------------------------ |
+| ThisWorkbook.cls   | Workbook Class  | 워크북 초기화 이벤트     |
+| Sheet_당일배포.bas | Sheet Module    | 당일 배포 DB 조회/관리   |
+| Sheet_조회_1.bas   | Sheet Module    | 과거 콜 로그 조회 (메인) |
+| Sheet_조회_2.bas   | Sheet Module    | 과거 콜 로그 조회 (서브) |
+| Sheet_CRM_입력.bas | Sheet Module    | CRM 업로드 처리          |
+| Sheet_예약조회.bas | Sheet Module    | 예약 조회 및 관리        |
+| Sheet_통계.bas     | Sheet Module    | 통계 데이터 조회         |
+| DB_Agent.cls       | Class Module    | DB 연결/트랜잭션 관리    |
+| SQL_Wrapper.bas    | Standard Module | SQL 파라미터 바인딩      |
+| Util.bas           | Standard Module | 범용 헬퍼 함수           |
+| Workbook_open.bas  | Standard Module | 로그인 및 초기화         |
+| Module1.bas        | Standard Module | 녹화된 매크로 (미사용)   |
 
 ---
 
@@ -110,13 +119,11 @@ graph TB
 
 **목적**: Oracle 데이터베이스 연결 및 쿼리 실행을 담당하는 핵심 클래스
 
-**주요 속성**:
-```vba
-Private connection As ADODB.connection
-Private connect_str As String
-Private sql_str As String
-Private result_recordset As ADODB.Recordset
-```
+**주요 속성**: [`Class_Initialize`](https://github.com/KnockKnock-Dev/VBA/blob/29af26e/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1289) 참조
+- `connection`: ADODB.Connection 객체
+- `connect_str`: DB 연결 문자열 (DSN=knock_crm_real;uid=knock_crm;pwd=...)
+- `sql_str`: 실행할 SQL 문자열
+- `result_recordset`: ADODB.Recordset 결과 저장
 
 **주요 메서드**:
 
@@ -130,12 +137,7 @@ Private result_recordset As ADODB.Recordset
 | `Commit_Trans()`          | Boolean | 트랜잭션 커밋           |
 | `Rollback_Trans()`        | Boolean | 트랜잭션 롤백           |
 
-**초기화 로직**:
-```vba
-Private Sub Class_Initialize()
-    connect_str = "DSN=knock_crm_real;uid=knock_crm;pwd=kkptcmr!@34"
-End Sub
-```
+**초기화 로직**: [`Class_Initialize`](https://github.com/KnockKnock-Dev/VBA/blob/29af26e/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1289) — `connect_str`에 DSN=knock_crm_real 연결 문자열 하드코딩
 
 **보안 이슈**: DB 비밀번호가 VBA 코드에 하드코딩되어 있음 (보안 취약점)
 
@@ -145,22 +147,16 @@ End Sub
 
 **목적**: Named Parameter 형식의 SQL을 실제 값으로 치환
 
-**핵심 함수**:
-```vba
-Function make_SQL(sql_str As String, ParamArray arglist() As Variant) As String
-```
+**핵심 함수**: [`make_SQL`](https://github.com/KnockKnock-Dev/VBA/blob/29af26e/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1434) — `(sql_str As String, ParamArray arglist() As Variant) As String`
 
 **동작 방식**:
 - `:param01`, `:param02`, ... 형식의 플레이스홀더를 실제 값으로 치환
 - `"ALL"` 값은 `'%'`로 변환 (LIKE 검색용)
 - 모든 값을 작은따옴표로 감싸서 SQL 인젝션 부분 방지
 
-**사용 예시**:
-```vba
-sql_str = "SELECT * FROM USER_INFO WHERE USER_NO = :param01 AND USER_NAME = :param02"
-sql_str = make_SQL(sql_str, "001", "홍길동")
-' 결과: "SELECT * FROM USER_INFO WHERE USER_NO = '001' AND USER_NAME = '홍길동'"
-```
+**사용 예시**: `:param01`, `:param02` 플레이스홀더를 실제 값으로 치환
+- 입력: `"SELECT * FROM USER_INFO WHERE USER_NO = :param01 AND USER_NAME = :param02"`, `"001"`, `"홍길동"`
+- 출력: `"SELECT * FROM USER_INFO WHERE USER_NO = '001' AND USER_NAME = '홍길동'"`
 
 ---
 
@@ -199,36 +195,19 @@ sequenceDiagram
     end
 ```
 
-**코드 핵심**:
-```vba
-Sub Workbook_Initialize()
-    Dim try_no As Integer
-    try_no = 0
+**코드 핵심**: [`Workbook_Initialize`](https://github.com/KnockKnock-Dev/VBA/blob/29af26e/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1593) 참조
+- `While try_no < 5` 루프로 최대 5회 재시도
+- `Login_Select_SQL` Named Range에서 인증 쿼리 로드
+- `make_SQL(sql_str, emp_no, emp_pass)`로 파라미터 바인딩
+- 성공 시 `Config!B11/C11`에 emp_no, emp_name 저장
+- 5회 실패 시 `ThisWorkbook.Close`
 
-    While try_no < 5 And try_no <> -1
-        emp_no = InputBox("User ID를 입력해주세요.", "User ID")
-        emp_pass = InputBox("User Pass를 입력해주세요.", "User Pass")
-
-        sql_str = Range("Login_Select_SQL").Offset(0, 0).Value2
-        sql_str = make_SQL(sql_str, emp_no, emp_pass)
-
-        If select_db_agent.Select_DB(sql_str) Then
-            If Not select_db_agent.DB_result_recordset.EOF Then
-                emp_name = select_db_agent.DB_result_recordset(0)
-                try_no = -1  ' 로그인 성공
-            End If
-        End If
-    Wend
-
-    If try_no >= 5 Then
-        MsgBox "Login Error : 파일을 닫고 다시 열어주세요"
-        ThisWorkbook.Close
-    End If
-
-    Sheets("Config").Cells(11, 2) = emp_no
-    Sheets("Config").Cells(11, 3) = emp_name
-End Sub
-```
+**관련 함수 (TM_일반.vba)**
+| 단계          | 함수                                                                                                                                       | 설명                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------ |
+| 초기화 진입점 | [`Workbook_Initialize`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1593) | 파일 열기 시 인증 루프 실행                |
+| SQL 파라미터  | [`make_SQL`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1434)            | Login_Select_SQL에 emp_no, emp_pass 바인딩 |
+| DB 인증 조회  | [`Select_DB`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1328)           | USER_INFO 테이블 인증 쿼리 실행            |
 
 ---
 
@@ -236,13 +215,9 @@ End Sub
 
 **목적**: 당일 배포된 DB를 조회하고 CRM_입력 시트로 복사
 
-**주요 상수**:
-```vba
-Const This_Sheet_Name As String = "당일배포"
-Const Target_Sheet_Name As String = "CRM_입력"
-Public Const START_ROW_NUM As Integer = 8
-Const MAX_ROW_NUM As Integer = 1000
-```
+**주요 상수**: [`Sheet_당일배포_Query`](https://github.com/KnockKnock-Dev/VBA/blob/29af26e/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1854) 상단 참조
+- `This_Sheet_Name = "당일배포"`, `Target_Sheet_Name = "CRM_입력"`
+- `START_ROW_NUM = 8`, `MAX_ROW_NUM = 1000`
 
 **핵심 기능**:
 
@@ -259,22 +234,9 @@ Const MAX_ROW_NUM As Integer = 1000
    - 입력된 콜 결과를 CRM_입력 시트로 일괄 복사
    - 예약일 검증 로직 포함
 
-**데이터 검증 로직**:
-```vba
-' 예약완료/예약변경인 경우 예약일 필수
-If (.Cells(row_idx, 13) = "예약완료" Or .Cells(row_idx, 13) = "예약변경") _
-   And .Cells(row_idx, 14) = "" Then
-    MsgBox "예약일이 비었습니다. 행번호 : " & row_idx
-    Exit Sub
-End If
-
-' 예약일이 입력되어 있으면 콜 결과가 예약완료/예약변경이어야 함
-If .Cells(row_idx, 14) <> "" _
-   And (.Cells(row_idx, 13) <> "예약완료" And .Cells(row_idx, 13) <> "예약변경") Then
-    MsgBox "콜 결과값이 잘못 되었습니다. (예약일이 입력되어있음)"
-    Exit Sub
-End If
-```
+**데이터 검증 로직**: [`Sheet_당일배포_CRM입력_복사`](https://github.com/KnockKnock-Dev/VBA/blob/29af26e/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2320) 참조
+- 콜 결과가 "예약완료" 또는 "예약변경"이면 예약일(col 14) 필수
+- 예약일이 입력된 경우 콜 결과는 반드시 "예약완료" 또는 "예약변경"이어야 함
 
 ---
 
@@ -304,26 +266,10 @@ End If
    - 예약 환자의 내원 여부 DB 업데이트
    - 차트 번호 입력 가능
 
-**복사 검증 로직**:
-```vba
-' 당일 입력 콜 로그만 복사 가능
-If .Cells(row_idx, 2) <> Date Then
-    MsgBox "당일 입력 call log가 아닙니다."
-    Exit Sub
-End If
-
-' 콜 결과값 필수
-If .Cells(row_idx, 10) = "" Then
-    MsgBox "콜 결과값이 없습니다."
-    Exit Sub
-End If
-
-' 이미 복사된 행 체크
-If .Cells(row_idx, 1) = "Y" Then
-    MsgBox "이미 CRM_입력 시트 복사가 된 행입니다."
-    Exit Sub
-End If
-```
+**복사 검증 로직**: [`Sheet_조회_1_CRM_입력_복사_개별`](https://github.com/KnockKnock-Dev/VBA/blob/29af26e/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1038) 참조
+- col 2 (`REF_DATE`) = 오늘 날짜인지 확인 (당일 입력만 복사 가능)
+- col 10 (`CALL_RESULT`) 비어있으면 에러
+- col 1 (`Y 플래그`) = "Y"이면 이미 복사된 행으로 차단
 
 ---
 
@@ -369,46 +315,18 @@ flowchart TD
     style Z fill:#f0f0f0
 ```
 
-**주요 코드**:
-```vba
-Public Sub Sheet_CRM_입력_CRM_Upload()
-    ' 중복 업로드 경고
-    If .Cells(5, 3) = "Y" Then
-        If MsgBox("CRM Upload 를 하신 적이 있습니다. 계속?", vbYesNo) = vbNo Then
-            Exit Sub
-        End If
-    End If
+**주요 코드**: [`Sheet_CRM_입력_CRM_Upload`](https://github.com/KnockKnock-Dev/VBA/blob/29af26e/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L420) 참조
+- `Cells(5, 3) = "Y"` 체크 → 중복 업로드 경고
+- `Begin_Trans` → 행별로 MAX_SEQ 조회 후 `CRM_입력_INSERT_SQL` 실행
+- 완료 후 `Commit_Trans` + `Cells(5, 3) = "Y"` 플래그 설정
 
-    ' 트랜잭션 시작
-    select_db_agent.Begin_Trans
-
-    While .Cells(row_idx, 2) <> ""
-        ' SEQ_NO 조회
-        sql_str = Range("CRM_입력_MAX_SEQ_SELECT_SQL").Value2
-        sql_str = make_SQL(sql_str, REF_DATE, TM_NAME, DB_SRC_2, PHONE_NO)
-
-        If IsNull(select_db_agent.DB_result_recordset(0)) Then
-            seq_no = 1
-        Else
-            seq_no = select_db_agent.DB_result_recordset(0) + 1
-        End If
-
-        ' INSERT 실행
-        sql_str = Range("CRM_입력_INSERT_SQL").Value2
-        sql_str = make_SQL(sql_str, REF_DATE, TM_NAME, DB_SRC_2, PHONE_NO, _
-                          seq_no, EVENT_TYPE, CLIENT_NAME, CALL_MEMO, _
-                          CALL_RESULT, RESERV_DATE, RESERV_TIME, VISITED_YN, _
-                          TM_MEMO, DB_DIST_DATE, IN_OUT_TYPE, ALT_USER_NO)
-
-        select_db_agent.Insert_update_DB(sql_str)
-        row_idx = row_idx + 1
-    Wend
-
-    ' 커밋 및 플래그 설정
-    select_db_agent.Commit_Trans
-    .Cells(5, 3) = "Y"
-End Sub
-```
+**관련 함수 (TM_일반.vba)**
+| 단계          | 함수                                                                                                                                                                                                                                                                                                                                                                                                             | 설명                                |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| 업로드 진입점 | [`Sheet_CRM_입력_CRM_Upload`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L420)                                                                                                                                                                                                                                                                  | TM_CALL_LOG INSERT 및 트랜잭션 관리 |
+| 시트 초기화   | [`Sheet_CRM_입력_Clear`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L376)                                                                                                                                                                                                                                                                       | CRM_입력 시트 데이터 초기화         |
+| 트랜잭션      | [`Begin_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1415) / [`Commit_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1419) / [`Rollback_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1423) | DB_Agent 트랜잭션 제어              |
+| INSERT 실행   | [`Insert_update_DB`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1359)                                                                                                                                                                                                                                                                          | TM_CALL_LOG INSERT 실행             |
 
 **DB_DIST_DATE 결정 로직**:
 - **"당일"**: REF_DATE (CRM 입력 기준일)
@@ -531,42 +449,15 @@ End Sub
 
 ### 5.1 시트별 상수
 
-#### Sheet_당일배포.bas
-```vba
-Const This_Sheet_Name As String = "당일배포"
-Const Target_Sheet_Name As String = "CRM_입력"
-Public Const START_ROW_NUM As Integer = 8      ' 데이터 시작 행
-Const MAX_ROW_NUM As Integer = 1000            ' 최대 데이터 행
-```
+각 시트 모듈 상단에 아래와 같이 상수가 정의되어 있음:
 
-#### Sheet_조회_1.bas / Sheet_조회_2.bas
-```vba
-Const This_Sheet_Name As String = "조회_1"
-Const Target_Sheet_Name As String = "CRM_입력"
-Public Const START_ROW_NUM As Integer = 8
-Const MAX_ROW_NUM As Long = 50000              ' 조회는 최대 5만 행
-```
-
-#### Sheet_CRM_입력.bas
-```vba
-Const This_Sheet_Name As String = "CRM_입력"
-Public Const START_ROW_NUM As Integer = 7      ' 여기만 7행 시작
-Const MAX_ROW_NUM As Integer = 1000
-```
-
-#### Sheet_예약조회.bas
-```vba
-Const This_Sheet_Name As String = "예약조회"
-Public Const START_ROW_NUM As Integer = 8
-Const MAX_ROW_NUM As Integer = 1000
-```
-
-#### Sheet_통계.bas
-```vba
-Const This_Sheet_Name As String = "통계"
-Public Const START_ROW_NUM As Integer = 8
-Const MAX_ROW_NUM As Integer = 10000           ' 통계는 1만 행
-```
+| 모듈                           | This_Sheet_Name | Target_Sheet_Name | START_ROW_NUM | MAX_ROW_NUM |
+| ------------------------------ | --------------- | ----------------- | ------------- | ----------- |
+| Sheet_당일배포.bas             | `"당일배포"`    | `"CRM_입력"`      | 8             | 1,000       |
+| Sheet_조회_1.bas / 조회_2.bas  | `"조회_1"`      | `"CRM_입력"`      | 8             | 50,000      |
+| Sheet_CRM_입력.bas             | `"CRM_입력"`    | -                 | **7** (특이)  | 1,000       |
+| Sheet_예약조회.bas             | `"예약조회"`    | -                 | 8             | 1,000       |
+| Sheet_통계.bas                 | `"통계"`        | -                 | 8             | 10,000      |
 
 ### 5.2 전역 Named Range (Excel 이름 정의)
 
@@ -675,23 +566,9 @@ Const MAX_ROW_NUM As Integer = 10000           ' 통계는 1만 행
 | RESERV_STATUS | VARCHAR(20)  | 예약 상태 (미도래, 이행, 취소) |
 | CANCEL_YN     | NUMBER       | 취소 여부 (0: 정상, >0: 취소)  |
 
-**주요 로직**:
-```vba
-' 덴트웹 예약 상태 표시
-.Cells(row_idx, 18) = IIf(DB_result(9) > 0, "이행", DB_result(8)) _
-                    & "(" & DB_result(1) & ")"
-
-' 취소 건인 경우 다음 미도래 예약 찾기
-If Left(.Cells(row_idx, 18), 2) = "취소" Then
-    Do While Not recordset.EOF
-        If recordset(8) = "미도래" Then
-            .Cells(row_idx, 18) = recordset(8) & "(" & recordset(1) & ")"
-            Exit Do
-        End If
-        recordset.MoveNext
-    Loop
-End If
-```
+**주요 로직**: [`Sheet_당일배포_Query`](https://github.com/KnockKnock-Dev/VBA/blob/29af26e/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1854) 참조
+- `CANCEL_YN > 0` → "이행", 아니면 `RESERV_STATUS` 그대로 표시 (col 18)
+- 상태가 "취소"로 시작하면 Recordset을 순회하여 다음 "미도래" 예약 찾기
 
 ---
 
@@ -735,6 +612,13 @@ sequenceDiagram
         VBA->>User: "Login Error" 메시지
     end
 ```
+
+**관련 함수 (TM_일반.vba)**
+| 단계          | 함수                                                                                                                                       | 설명                   |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
+| 로그인 초기화 | [`Workbook_Initialize`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1593) | 파일 열기 시 인증 루프 |
+| DB 조회       | [`Select_DB`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1328)           | USER_INFO 인증 쿼리    |
+| SQL 바인딩    | [`make_SQL`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1434)            | ID/PW 파라미터 바인딩  |
 
 ---
 
@@ -809,6 +693,15 @@ flowchart TD
     style AL fill:#c8e6c9
 ```
 
+**관련 함수 (TM_일반.vba)**
+| 단계          | 함수                                                                                                                                                                                                                                                                                                                                                                                                             | 설명                                |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| 당일배포 조회 | [`Sheet_당일배포_Query`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2156)                                                                                                                                                                                                                                                                      | DB_DIST에서 당일 배포 데이터 조회   |
+| 추가배포 조회 | [`Sheet_당일배포_추가배포_조회`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1968)                                                                                                                                                                                                                                                              | 추가 배포 데이터 조회               |
+| CRM입력 복사  | [`Sheet_당일배포_CRM입력_복사`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2320)                                                                                                                                                                                                                                                               | 데이터 검증 후 CRM_입력 시트로 복사 |
+| CRM 업로드    | [`Sheet_CRM_입력_CRM_Upload`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L420)                                                                                                                                                                                                                                                                  | TM_CALL_LOG INSERT/트랜잭션         |
+| 트랜잭션      | [`Begin_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1415) / [`Commit_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1419) / [`Rollback_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1423) | DB_Agent 트랜잭션 제어              |
+
 ---
 
 ### 7.3 과거 콜 로그 조회 및 추가 입력 프로세스
@@ -855,6 +748,13 @@ flowchart LR
     style U fill:#c8e6c9
 ```
 
+**관련 함수 (TM_일반.vba)**
+| 단계         | 함수                                                                                                                                                   | 설명                              |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
+| 과거 콜 조회 | [`Sheet_조회_1_Query`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L846)               | TM_CALL_LOG 과거 기록 조회        |
+| 행 추가      | [`Sheet_조회_1_행추가`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L986)              | 조회_1 시트에 새 행 삽입          |
+| 개별 복사    | [`Sheet_조회_1_CRM_입력_복사_개별`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1038) | 개별 행 검증 후 CRM_입력으로 복사 |
+
 ---
 
 ### 7.4 내원 여부 업데이트 프로세스
@@ -892,6 +792,13 @@ sequenceDiagram
     end
 ```
 
+**관련 함수 (TM_일반.vba)**
+| 단계           | 함수                                                                                                                                                                                                                                                                     | 설명                        |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------- |
+| 내원 여부 저장 | [`Sheet_조회_1_내원여부_저장`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1167)                                                                                                                        | VISITED_YN, CHART_NO UPDATE |
+| 트랜잭션       | [`Begin_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1415) / [`Commit_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1419) | DB_Agent 트랜잭션 제어      |
+| UPDATE 실행    | [`Insert_update_DB`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1359)                                                                                                                                  | TM_CALL_LOG UPDATE 실행     |
+
 ---
 
 ### 7.5 SEQ_NO 결정 로직 (중복 전화 처리)
@@ -919,6 +826,12 @@ flowchart TD
     style F fill:#c8e6c9
     style G fill:#fff9c4
 ```
+
+**관련 함수 (TM_일반.vba)**
+| 단계        | 함수                                                                                                                                    | 설명                                           |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| SEQ_NO 조회 | [`Select_DB`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1328)        | MAX(SEQ_NO) 조회 (CRM_입력_MAX_SEQ_SELECT_SQL) |
+| INSERT 실행 | [`Insert_update_DB`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1359) | SEQ_NO 포함하여 TM_CALL_LOG INSERT             |
 
 **예시**:
 
@@ -1016,6 +929,17 @@ graph TB
     style F7 fill:#c8e6c9
 ```
 
+**관련 함수 (TM_일반.vba)**
+| 단계             | 함수                                                                                                                                                  | 설명                   |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| 1. 로그인        | [`Workbook_Initialize`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1593)            | 파일 열기 시 인증      |
+| 2. 당일배포 조회 | [`Sheet_당일배포_Query`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2156)           | DB_DIST 조회           |
+| 4. CRM 업로드    | [`Sheet_CRM_입력_CRM_Upload`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L420)       | TM_CALL_LOG INSERT     |
+| 5. 과거 조회     | [`Sheet_조회_1_Query`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L846)              | 과거 콜 로그 조회      |
+| 5. 행추가        | [`Sheet_조회_1_행추가`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L986)             | 조회_1 시트 새 행 삽입 |
+| 6. 내원 저장     | [`Sheet_조회_1_내원여부_저장`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1167)     | VISITED_YN UPDATE      |
+| 7. 통계 조회     | [`Sheet_통계_TM별_일일_통계_조회`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2524) | TM별 일일 성과 집계    |
+
 ---
 
 ### 8.2 로그인 및 당일배포 조회 프로세스
@@ -1105,6 +1029,14 @@ sequenceDiagram
         Sheet->>User: "조회 완료" 메시지
     end
 ```
+
+**관련 함수 (TM_일반.vba)**
+| 단계          | 함수                                                                                                                                        | 설명                          |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| 로그인        | [`Workbook_Initialize`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1593)  | USER_INFO 인증                |
+| 당일배포 조회 | [`Sheet_당일배포_Query`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2156) | DB_DIST 배포 데이터 조회      |
+| DB 연결       | [`Connect_DB`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1299)           | ODBC 연결 초기화              |
+| DB 조회       | [`Select_DB`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1328)            | 배포/콜로그/DentWeb 예약 조회 |
 
 ---
 
@@ -1211,6 +1143,14 @@ flowchart TD
     style AZ fill:#c8e6c9
     style End fill:#f0f0f0
 ```
+
+**관련 함수 (TM_일반.vba)**
+| 단계         | 함수                                                                                                                                                                                                                                                                                                                                                                                                             | 설명                                |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| CRM입력 복사 | [`Sheet_당일배포_CRM입력_복사`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2320)                                                                                                                                                                                                                                                               | 데이터 검증 후 CRM_입력 시트로 복사 |
+| CRM 업로드   | [`Sheet_CRM_입력_CRM_Upload`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L420)                                                                                                                                                                                                                                                                  | TM_CALL_LOG INSERT/트랜잭션         |
+| 트랜잭션     | [`Begin_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1415) / [`Commit_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1419) / [`Rollback_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1423) | DB_Agent 트랜잭션 제어              |
+| INSERT 실행  | [`Insert_update_DB`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1359)                                                                                                                                                                                                                                                                          | TM_CALL_LOG INSERT 실행             |
 
 ---
 
@@ -1334,6 +1274,13 @@ sequenceDiagram
     end
 ```
 
+**관련 함수 (TM_일반.vba)**
+| 단계         | 함수                                                                                                                                                   | 설명                          |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------- |
+| 과거 콜 조회 | [`Sheet_조회_1_Query`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L846)               | TM_CALL_LOG 과거 콜 로그 조회 |
+| 행 추가      | [`Sheet_조회_1_행추가`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L986)              | 현재 행 복제하여 새 행 삽입   |
+| 개별 복사    | [`Sheet_조회_1_CRM_입력_복사_개별`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1038) | 검증 후 CRM_입력으로 복사     |
+
 ---
 
 ### 8.5 예약 및 내원 관리 프로세스
@@ -1403,6 +1350,14 @@ graph TD
     style C11 fill:#c8e6c9
 ```
 
+**관련 함수 (TM_일반.vba)**
+| 단계             | 함수                                                                                                                                                                                                                                                                                                                                                                                                             | 설명                        |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| 내원 여부 저장   | [`Sheet_조회_1_내원여부_저장`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1167)                                                                                                                                                                                                                                                                | VISITED_YN, CHART_NO UPDATE |
+| 통계 - TM별 일일 | [`Sheet_통계_TM별_일일_통계_조회`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2524)                                                                                                                                                                                                                                                            | TM별 일일 콜 성과 집계      |
+| 통계 - 내원환자  | [`Sheet_통계_내원환자_리스트_조회`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2692)                                                                                                                                                                                                                                                           | 내원 환자 목록 조회         |
+| 트랜잭션         | [`Begin_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1415) / [`Commit_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1419) / [`Rollback_Trans`](https://github.com/KnockKnock-Dev/VBA/blob/main/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1423) | DB_Agent 트랜잭션 제어      |
+
 ---
 
 ## 9. 관리자용과의 차이점
@@ -1435,20 +1390,11 @@ Knock CRM 시스템은 사용자 권한에 따라 두 가지 버전으로 구분
 
 #### 9.3.1 로그인 및 권한
 
-**TM 일반용**:
-```vba
-' Config 시트에 사용자 정보만 저장
-Sheets("Config").Cells(11, 2) = emp_no
-Sheets("Config").Cells(11, 3) = emp_name
-```
+**TM 일반용** ([`Workbook_Initialize`](https://github.com/KnockKnock-Dev/VBA/blob/29af26e/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L1593)):
+- `Config!B11` = emp_no, `Config!C11` = emp_name만 저장 (권한 레벨 없음)
 
 **관리자용** (추정):
-```vba
-' Config 시트에 사용자 정보 + 권한 레벨 저장
-Sheets("Config").Cells(11, 2) = emp_no
-Sheets("Config").Cells(11, 3) = emp_name
-Sheets("Config").Cells(11, 4) = user_type  ' "TM", "ADMIN", "MANAGER" 등
-```
+- `Config!D11` = user_type (`"TM"`, `"ADMIN"`, `"MANAGER"` 등) 추가 저장
 
 #### 9.3.2 당일배포 조회 vs 배포 관리
 
@@ -1465,29 +1411,12 @@ Sheets("Config").Cells(11, 4) = user_type  ' "TM", "ADMIN", "MANAGER" 등
 
 #### 9.3.3 통계 조회 범위
 
-**TM 일반용**:
-```vba
-' 본인 통계만 조회
-user_no = Range("Cur_User_No").Offset(0, 0).Value2
-sql_str = make_SQL(sql_str, ref_date_1, ref_date_2, user_no)  ' user_no 필터링
-```
+**TM 일반용** ([`Sheet_통계_TM별_일일_통계_조회`](https://github.com/KnockKnock-Dev/VBA/blob/29af26e/src_extracted/Knock_CRM_TM_v.0.40_TM_%EC%9D%BC%EB%B0%98.vba#L2524)):
+- `Cur_User_No` Named Range에서 현재 사용자 번호 읽어 `make_SQL`에 고정 전달 → 본인 통계만 조회
 
 **관리자용** (추정):
-```vba
-' 전체 TM 또는 특정 TM 선택 조회
-If user_type = "ADMIN" Or user_type = "MANAGER" Then
-    ' TM 선택 드롭다운 표시
-    selected_tm = Range("Selected_TM_No").Value
-    If selected_tm = "전체" Then
-        sql_str = make_SQL(sql_str, ref_date_1, ref_date_2, "%")  ' 모든 TM
-    Else
-        sql_str = make_SQL(sql_str, ref_date_1, ref_date_2, selected_tm)
-    End If
-Else
-    user_no = Range("Cur_User_No").Value2
-    sql_str = make_SQL(sql_str, ref_date_1, ref_date_2, user_no)
-End If
-```
+- TM 선택 드롭다운 (`Selected_TM_No`) 표시
+- "전체" 선택 시 `make_SQL`에 `"%"` 전달하여 모든 TM 조회 가능
 
 #### 9.3.4 CRM 업로드 중복 체크
 
